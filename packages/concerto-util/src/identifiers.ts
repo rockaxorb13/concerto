@@ -11,12 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ID_REGEX = void 0;
-exports.normalizeIdentifier = normalizeIdentifier;
+
 // Conforms to Concerto Spec for identifiers
-exports.ID_REGEX = /^(\p{Lu}|\p{Ll}|\p{Lt}|\p{Lm}|\p{Lo}|\p{Nl}|\$|_|\\u[0-9A-Fa-f]{4})(?:\p{Lu}|\p{Ll}|\p{Lt}|\p{Lm}|\p{Lo}|\p{Nl}|\$|_|\\u[0-9A-Fa-f]{4}|\p{Mn}|\p{Mc}|\p{Nd}|\p{Pc}|\u200C|\u200D)*$/u;
+export const ID_REGEX = /^(\p{Lu}|\p{Ll}|\p{Lt}|\p{Lm}|\p{Lo}|\p{Nl}|\$|_|\\u[0-9A-Fa-f]{4})(?:\p{Lu}|\p{Ll}|\p{Lt}|\p{Lm}|\p{Lo}|\p{Nl}|\$|_|\\u[0-9A-Fa-f]{4}|\p{Mn}|\p{Mc}|\p{Nd}|\p{Pc}|\u200C|\u200D)*$/u;
+
 /**
  * Function that attempts to normalize arbitrary strings
  * into valid Concerto identifiers
@@ -25,8 +25,8 @@ exports.ID_REGEX = /^(\p{Lu}|\p{Ll}|\p{Lt}|\p{Lm}|\p{Lo}|\p{Nl}|\$|_|\\u[0-9A-Fa
  * @param truncateLength - Length at which to truncate the identifier
  * @returns - An identifier that meets the Concerto specification
  */
-function normalizeIdentifier(identifier, truncateLength = -1) {
-    const replacer = (_match, group1) => {
+export function normalizeIdentifier(identifier: any, truncateLength: number = -1): string {
+    const replacer = (_match: string, group1: string) => {
         let escapedChar = '';
         // Loop through characters with multiple code points
         for (const codePoint of group1) {
@@ -35,27 +35,35 @@ function normalizeIdentifier(identifier, truncateLength = -1) {
         }
         return escapedChar;
     };
+
     // Stringify null & undefined values
-    let result = identifier !== null && identifier !== void 0 ? identifier : String(identifier);
-    if (typeof result !== 'string') {
+    let result = identifier ?? String(identifier);
+
+    if (typeof result !== 'string'){
         throw new Error(`Unsupported identifier type, '${typeof result}'.`);
     }
+
     // 1. If the identifier begins with a number, add a leading underscore
     result = result
         .replace(/^\p{Nd}/u, '_$&')
-        // 2. Substitute Whitespace, and joiners
+
+    // 2. Substitute Whitespace, and joiners
         .replace(/[-‐−@#:;><|/\\\u200c\u200d]/g, '_')
         .replace(/\s/g, '_')
-        // 3a. Replace Invalid Characters
+
+    // 3a. Replace Invalid Characters
         .replace(/(?!\p{Lu}|\p{Ll}|\p{Lt}|\p{Lm}|\p{Lo}|\p{Nl}|\$|_|\p{Mn}|\p{Mc}|\p{Nd}|\p{Pc}|\u200C|\u200D|\\u[0-9A-Fa-f]{4})(.)/gu, replacer)
-        // 3b. Escape Surrogate Pairs
+
+    // 3b. Escape Surrogate Pairs
         .replace(/([\uD800-\uDFFF])/g, replacer);
+
     // 4. Optionally truncate the identifier
-    if (truncateLength > 0) {
-        result = result.substring(0, truncateLength);
+    if (truncateLength > 0){
+        result = result.substring(0,truncateLength);
     }
+
     // Check validity
-    if (!exports.ID_REGEX.test(result)) {
+    if (!ID_REGEX.test(result)){
         throw new Error(`Unexpected error. Not able to escape identifier '${result}'.`);
     }
     return result;

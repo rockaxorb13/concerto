@@ -11,16 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.labelToSentence = labelToSentence;
-exports.sentenceToLabel = sentenceToLabel;
+
 /**
  * Inserts correct spacing and capitalization to a camelCase label
  * @param labelName - the label text to be transformed
  * @returns - The label text formatted for rendering
  */
-function labelToSentence(labelName = '') {
+export function labelToSentence(labelName: string = ''): string {
     return labelName
         .replace(/([a-z])([A-Z])/g, '$1 $2')
         .replace(/([A-Z])([a-z])/g, ' $1$2')
@@ -28,12 +27,13 @@ function labelToSentence(labelName = '') {
         .replace(/^./, str => str.toUpperCase())
         .trim();
 }
+
 /**
  * Create a camelCase label from a sentence
  * @param sentence - the sentence
  * @returns - The camelCase label
  */
-function sentenceToLabel(sentence = '') {
+export function sentenceToLabel(sentence: string = ''): string {
     const split = sentence.split(/[^A-Za-z0-9_-]+/);
     split.forEach((word, index) => {
         split[index] = split[index].replace(/^./, str => str.toUpperCase());

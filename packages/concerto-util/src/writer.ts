@@ -11,7 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
+
 /**
  * Writer buffers text to be written in memory. It handles simple
  * indentation and tracks the number of lines written.
@@ -20,6 +22,10 @@
  * @memberof module:concerto-util
  */
 class Writer {
+    public beforeBuffer: string;
+    public buffer: string;
+    public linesWritten: number;
+
     /**
      * Create a Writer.
      */
@@ -28,77 +34,87 @@ class Writer {
         this.buffer = '';
         this.linesWritten = 0;
     }
+
     /**
      * Writes text to the start of the buffer
      * @param tabs - the number of tabs to use
      * @param text - the text to write
      */
-    writeBeforeLine(tabs, text) {
-        for (let n = 0; n < tabs; n++) {
+    writeBeforeLine(tabs: number, text: string): void {
+        for(let n=0; n < tabs; n++) {
             this.beforeBuffer += '   ';
         }
         this.beforeBuffer += text;
         this.beforeBuffer += '\n';
         this.linesWritten++;
     }
+
     /**
      * Append text to the buffer
      * @param tabs - the number of tabs to use
      * @param text - the text to write
      */
-    writeLine(tabs, text) {
-        for (let n = 0; n < tabs; n++) {
+    writeLine(tabs: number, text: string): void {
+        for(let n=0; n < tabs; n++) {
             this.write('   ');
         }
         this.write(text);
         this.write('\n');
         this.linesWritten++;
     }
+
     /**
      * Returns the number of lines that have been written to the buffer.
      * @return the number of lines written to the buffer.
      */
-    getLineCount() {
+    getLineCount(): number {
         return this.linesWritten;
     }
+
+
     /**
      * Append text to the buffer, prepending tabs
      * @param tabs - the number of tabs to use
      * @param text - the text to write
      */
-    writeIndented(tabs, text) {
-        for (let n = 0; n < tabs; n++) {
+    writeIndented(tabs: number, text: string): void {
+        for(let n=0; n < tabs; n++) {
             this.write('   ');
         }
         this.write(text);
     }
+
     /**
      * Append text to the buffer (no automatic newline). The
      * text may contain newline, and these will increment the linesWritten
      * counter.
      * @param msg - the text to write
      */
-    write(msg) {
-        if (typeof msg !== 'string') {
+    write(msg: string): void {
+        if(typeof msg !== 'string' ) {
             throw new Error('Can only append strings. Argument ' + msg + ' has type ' + typeof msg);
         }
+
         this.buffer += msg;
         this.linesWritten += msg.split(/\r\n|\r|\n/).length;
     }
+
     /**
      * Returns the text that has been buffered in this Writer.
      * @return the buffered text.
      */
-    getBuffer() {
+    getBuffer(): string {
         return this.beforeBuffer + this.buffer;
     }
+
     /**
      * Empties the underyling buffer and resets the line count.
      */
-    clearBuffer() {
+    clearBuffer(): void {
         this.beforeBuffer = '';
         this.buffer = '';
         this.linesWritten = 0;
     }
 }
-module.exports = Writer;
+
+export = Writer;

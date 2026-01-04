@@ -11,8 +11,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
-const Writer = require("./writer");
+
+import Writer = require('./writer');
+
 /**
  * InMemoryWriter stores string representation of files in a map structure.
  * The Map key is the filename, and the value are its string contents.
@@ -24,6 +27,9 @@ const Writer = require("./writer");
  * @memberof module:concerto-core
  */
 class InMemoryWriter extends Writer {
+    public fileName: string;
+    public data: Map<string, string>;
+
     /**
      * Create a FileWriter.
      *
@@ -31,30 +37,34 @@ class InMemoryWriter extends Writer {
     constructor() {
         super();
         this.fileName = '';
-        this.data = new Map();
+        this.data = new Map<string, string>();
     }
+
     /**
      * Creates the filename which will be used for association with its string content.
      *
      * @param fileName - the name of the file.
      */
-    openFile(fileName) {
+    openFile(fileName: string): void {
         this.fileName = fileName;
     }
+
     /**
      * Writes the contents of the buffer to the Map store.
      */
-    closeFile() {
+    closeFile(): void {
         this.data.set(this.fileName, this.getBuffer());
         this.clearBuffer();
     }
+
     /**
      * Returns the content of the Map store.
      *
      * @return - a Map containing the string representation of files. (k,v) => (filename, file content).
      */
-    getFilesInMemory() {
+    getFilesInMemory(): Map<string, string> {
         return this.data;
     }
 }
-module.exports = InMemoryWriter;
+
+export = InMemoryWriter;

@@ -12,6 +12,8 @@
  * limitations under the License.
  */
 
+'use strict';
+
 /**
  * Internal Utility Class
  * @class
