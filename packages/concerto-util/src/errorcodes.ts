@@ -11,19 +11,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CONCERTO_DEPRECATION_002 = exports.CONCERTO_DEPRECATION_001 = exports.DEPRECATION_WARNING = exports.TYPE_NOT_FOUND_EXCEPTION = exports.REGEX_VALIDATOR_EXCEPTION = exports.DEFAULT_VALIDATOR_EXCEPTION = exports.DEFAULT_BASE_EXCEPTION = void 0;
+
 //default base exception
-exports.DEFAULT_BASE_EXCEPTION = 'DefaultBaseException';
+export const DEFAULT_BASE_EXCEPTION = 'DefaultBaseException';
 //default validator exception which is being used when there is no specified validator exception in introspect
-exports.DEFAULT_VALIDATOR_EXCEPTION = 'DefaultValidatorException';
+export const DEFAULT_VALIDATOR_EXCEPTION = 'DefaultValidatorException';
 // exception code for regex validator format error
-exports.REGEX_VALIDATOR_EXCEPTION = 'RegexValidatorException';
+export const REGEX_VALIDATOR_EXCEPTION = 'RegexValidatorException';
 // base exception for Type not found
-exports.TYPE_NOT_FOUND_EXCEPTION = 'TypeNotFoundException';
+export const TYPE_NOT_FOUND_EXCEPTION = 'TypeNotFoundException';
 // deprecation warning type for process.emitWarning
-exports.DEPRECATION_WARNING = 'DeprecationWarning';
+export const DEPRECATION_WARNING = 'DeprecationWarning';
+
+
 //deprecation codes
-exports.CONCERTO_DEPRECATION_001 = 'concerto-dep:001';
-exports.CONCERTO_DEPRECATION_002 = 'concerto-dep:002';
+export const CONCERTO_DEPRECATION_001 = 'concerto-dep:001';
+export const CONCERTO_DEPRECATION_002 = 'concerto-dep:002';

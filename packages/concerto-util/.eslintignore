@@ -1,6 +1,6 @@
-dist/
-out/
+lib/
 coverage/
-doc/
 node_modules/
-lib/null.js
+out/
+dist/
+doc/

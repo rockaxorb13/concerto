@@ -11,8 +11,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
-const HTTPFileLoader = require("./httpfileloader");
+
+import HTTPFileLoader = require('./httpfileloader');
+
 /**
  * Loads Files from an external source, such as a URL.
  *
@@ -26,18 +29,20 @@ class GitHubFileLoader extends HTTPFileLoader {
      * @param processFile - a function to apply to the content of the file
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    constructor(processFile) {
+    constructor(processFile: (name: string, text: string) => any) {
         super(processFile);
     }
+
     /**
      * Returns true if this ModelLoader can process the URL
      * @param url - the URL
      * @return true if this ModelLoader accepts the URL
      * @abstract
      */
-    accepts(url) {
+    accepts(url: string): boolean {
         return url.startsWith('github://');
     }
+
     /**
      * Load a File from a URL and return it
      * @param url - the url to get
@@ -45,10 +50,11 @@ class GitHubFileLoader extends HTTPFileLoader {
      * @return a promise to the File
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    load(url, options) {
+    load(url: string, options: any): Promise<any> {
         const rewrittenUrl = 'https://raw.githubusercontent.com/' + url.substring(9);
         const result = super.load(rewrittenUrl, options);
         return result;
     }
 }
-module.exports = GitHubFileLoader;
+
+export = GitHubFileLoader;

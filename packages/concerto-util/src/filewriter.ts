@@ -11,43 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-const fs = __importStar(require("fs"));
-const path = __importStar(require("path"));
-const Writer = require("./writer");
+
+import * as fs from 'fs';
+import * as path from 'path';
+import Writer = require('./writer');
+
 /**
  * FileWriter buffers text to be written to a file.
  * @private
@@ -55,83 +25,92 @@ const Writer = require("./writer");
  * @memberof module:concerto-util
  */
 class FileWriter extends Writer {
+    public outputDirectory: string;
+    public fileName: string | null = null;
+    public relativeDir: string | null = null;
+
     /**
      * Create a FileWriter.
      * @param outputDirectory - the output directory
      */
-    constructor(outputDirectory) {
+    constructor(outputDirectory: string) {
         super();
-        this.fileName = null;
-        this.relativeDir = null;
         this.outputDirectory = outputDirectory;
         this.relativeDir = null;
         this.fileName = null;
-        fs.mkdirSync(outputDirectory, { recursive: true });
+        fs.mkdirSync(outputDirectory, {recursive:true});
     }
+
     /**
      * Open a file for writing. The file is created in the
      * output directory.
      * @param fileName - the name of the file to open
      */
-    openFile(fileName) {
+    openFile(fileName: string): void {
         this.fileName = fileName;
         this.relativeDir = null;
     }
+
     /**
      * Open a file for writing. The file is created in the
      * output directory, plus the relative directory path.
      * @param relativeDir - the relative directory
      * @param fileName - the name of the file to open
      */
-    openRelativeFile(relativeDir, fileName) {
+    openRelativeFile(relativeDir: string, fileName: string): void {
         this.fileName = fileName;
         this.relativeDir = relativeDir;
         this.clearBuffer();
     }
+
     /**
      * Writes text to the current open file
      * @param tabs - the number of tabs to use
      * @param text - the text to write
      */
-    writeLine(tabs, text) {
+    writeLine(tabs: number, text: string): void {
         if (this.fileName) {
-            super.writeLine(tabs, text);
-        }
-        else {
+            super.writeLine(tabs,text);
+        } else {
             throw new Error('File has not been opened!');
         }
     }
+
     /**
      * Writes text to the start of the current open file
      * @param tabs - the number of tabs to use
      * @param text - the text to write
      */
-    writeBeforeLine(tabs, text) {
+    writeBeforeLine(tabs: number, text: string): void {
         if (this.fileName) {
-            super.writeBeforeLine(tabs, text);
-        }
-        else {
+            super.writeBeforeLine(tabs,text);
+        } else {
             throw new Error('File has not been opened!');
         }
     }
+
     /**
      * Closes the file, flushing the buffer to disk.
      */
-    closeFile() {
+    closeFile(): void {
         if (!this.fileName) {
             throw new Error('No file open');
         }
+
         let filePath = this.outputDirectory;
         if (this.relativeDir) {
             filePath = path.resolve(filePath, this.relativeDir);
         }
         filePath = path.resolve(filePath, this.fileName);
+
         //console.log('Writing to ' + filePath );
-        fs.mkdirSync(path.dirname(filePath), { recursive: true });
+        fs.mkdirSync(path.dirname(filePath), {recursive:true});
         fs.writeFileSync(filePath, this.getBuffer());
+
         this.fileName = null;
         this.relativeDir = null;
         this.clearBuffer();
     }
 }
-module.exports = FileWriter;
+
+export = FileWriter;

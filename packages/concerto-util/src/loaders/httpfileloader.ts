@@ -11,7 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
+
+// Ensure fetch is recognized if not in global types
+declare const fetch: any;
+
 /**
  * Loads Files from an HTTP(S) URL using fetch.
  * @class
@@ -19,23 +24,28 @@
  * @memberof module:concerto-util
  */
 class HTTPFileLoader {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public processFile: (name: string, text: string) => any;
+
     /**
      * Create the HTTPFileLoader.
      * @param processFile - a function to apply to the content of the file
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    constructor(processFile) {
+    constructor(processFile: (name: string, text: string) => any) {
         this.processFile = processFile;
     }
+
     /**
      * Returns true if this ModelLoader can process the URL
      * @param url - the URL
      * @return true if this ModelLoader accepts the URL
      * @abstract
      */
-    accepts(url) {
+    accepts(url: string): boolean {
         return url.startsWith('http://') || url.startsWith('https://');
     }
+
     /**
      * Load a text File from a URL and return it
      * @param requestUrl - the url to get
@@ -43,7 +53,7 @@ class HTTPFileLoader {
      * @return a promise to the File
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async load(requestUrl, options) {
+    async load(requestUrl: string, options: any): Promise<any> {
         if (!options) {
             options = {
                 method: 'GET',
@@ -52,6 +62,7 @@ class HTTPFileLoader {
                 }
             };
         }
+
         // eslint-disable-next-line no-console
         console.log(requestUrl);
         const response = await fetch(requestUrl, options);
@@ -66,4 +77,5 @@ class HTTPFileLoader {
         return this.processFile(name, text);
     }
 }
-module.exports = HTTPFileLoader;
+
+export = HTTPFileLoader;

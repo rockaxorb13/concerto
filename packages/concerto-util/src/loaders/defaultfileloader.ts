@@ -11,10 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
-const CompositeFileLoader = require("./compositefileloader");
-const HTTPFileLoader = require("./httpfileloader");
-const GitHubFileLoader = require("./githubfileloader");
+
+import CompositeFileLoader = require('./compositefileloader');
+import HTTPFileLoader = require('./httpfileloader');
+import GitHubFileLoader = require('./githubfileloader');
+
 /**
  * <p>
  * A default CompositeFileLoader implementation which supports
@@ -31,7 +34,7 @@ class DefaultFileLoader extends CompositeFileLoader {
      * @param processFile - a function to apply to the content of the file
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    constructor(processFile) {
+    constructor(processFile: (name: string, text: string) => any) {
         super();
         const http = new HTTPFileLoader(processFile);
         const github = new GitHubFileLoader(processFile);
@@ -39,4 +42,5 @@ class DefaultFileLoader extends CompositeFileLoader {
         this.addFileLoader(http);
     }
 }
-module.exports = DefaultFileLoader;
+
+export = DefaultFileLoader;

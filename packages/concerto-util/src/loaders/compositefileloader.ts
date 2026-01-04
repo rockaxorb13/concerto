@@ -11,7 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
+
 /**
  * <p>
  * Manages a set of model file loaders, delegating to the first model file
@@ -22,50 +24,60 @@
  * @memberof module:concerto-util
  */
 class CompositeFileLoader {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public fileLoaders: any[];
+
     /**
      * Create the CompositeFileLoader. Used to delegate to a set of FileLoaders.
      */
     constructor() {
         this.fileLoaders = [];
     }
+
     /**
      * Adds a FileLoader implemenetation to the FileLoader
      * @param fileLoader - The script to add to the ScriptManager
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    addFileLoader(fileLoader) {
+    addFileLoader(fileLoader: any): void {
         this.fileLoaders.push(fileLoader);
     }
+
     /**
      * Get the array of FileLoader instances
      * @return The FileLoader registered
      * @private
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    getFileLoaders() {
+    getFileLoaders(): any[] {
         return this.fileLoaders;
     }
+
     /**
      * Remove all registered FileLoaders
      */
-    clearFileLoaders() {
+    clearFileLoaders(): void {
         this.fileLoaders = [];
     }
+
     /**
      * Returns true if this ModelLoader can process the URL
      * @param url - the URL
      * @return true if this ModelLoader accepts the URL
      * @abstract
      */
-    accepts(url) {
+    accepts(url: string): boolean {
         for (let n = 0; n < this.fileLoaders.length; n++) {
             const ml = this.fileLoaders[n];
+
             if (ml.accepts(url)) {
                 return true;
             }
         }
+
         return false;
     }
+
     /**
      * Load a File from a URL and return it
      * @param url - the url to get
@@ -73,14 +85,17 @@ class CompositeFileLoader {
      * @return a promise to the File
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    load(url, options) {
+    load(url: string, options: any): Promise<any> {
         for (let n = 0; n < this.fileLoaders.length; n++) {
             const ml = this.fileLoaders[n];
+
             if (ml.accepts(url)) {
                 return ml.load(url, options);
             }
         }
+
         throw new Error('Failed to find a model file loader that can handle: ' + url);
     }
 }
-module.exports = CompositeFileLoader;
+
+export = CompositeFileLoader;

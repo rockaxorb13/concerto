@@ -11,8 +11,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
-const BaseException = require("./baseexception");
+
+import BaseException = require('./baseexception');
+
 /**
  * Exception throws when a Concerto file is semantically invalid
  * @extends BaseException
@@ -21,6 +24,10 @@ const BaseException = require("./baseexception");
  * @memberof module:concerto-core
  */
 class BaseFileException extends BaseException {
+    public fileLocation: string | null;
+    public shortMessage: string;
+    public fileName: string | null;
+
     /**
      * Create an BaseFileException
      * @param message - the message for the exception
@@ -29,32 +36,36 @@ class BaseFileException extends BaseException {
      * @param fileName - the file name
      * @param component - the component which throws this error
      */
-    constructor(message, fileLocation = null, fullMessage = null, fileName = null, component) {
+    constructor(message: string, fileLocation: string | null = null, fullMessage: string | null = null, fileName: string | null = null, component?: string) {
         super(fullMessage ? fullMessage : message, component);
         this.fileLocation = fileLocation;
         this.shortMessage = message;
         this.fileName = fileName;
     }
+
     /**
      * Returns the file location associated with the exception or null
      * @return the optional location associated with the exception
      */
-    getFileLocation() {
+    getFileLocation(): string | null {
         return this.fileLocation;
     }
+
     /**
      * Returns the error message without the location of the error
      * @returns the error message
      */
-    getShortMessage() {
+    getShortMessage(): string {
         return this.shortMessage;
     }
+
     /**
      * Returns the fileName for the error
      * @returns the file name or null
      */
-    getFileName() {
+    getFileName(): string | null {
         return this.fileName;
     }
 }
-module.exports = BaseFileException;
+
+export = BaseFileException;

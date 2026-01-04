@@ -11,10 +11,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.printDeprecationWarning = printDeprecationWarning;
+
+// Tell TypeScript that 'process' exists globally (shims Node.js types)
+declare const process: any;
+
 let isWarningEmitted = false;
+
 /**
  * Emits DeprecationWaring to stderr only once and can be caught using an warning event listener as well, please define the code
  * and document the deprecation code on https://concerto.accordproject.org/deprecation
@@ -23,7 +27,7 @@ let isWarningEmitted = false;
  * @param code - code of the deprecation warning
  * @param detail - detail of the deprecation warning
  */
-function printDeprecationWarning(message, type, code, detail) {
+export function printDeprecationWarning(message: string, type: string, code: string, detail: string): void {
     // This will get pollyfilled in the webpack.config.js as process.emitWarning is not available in the browser
     const customEmitWarning = process.emitWarning;
     if (!isWarningEmitted) {
