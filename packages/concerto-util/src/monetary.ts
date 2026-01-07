@@ -14,8 +14,7 @@
 
 'use strict';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const n2words = require('n2words');
+import n2words from 'n2words';
 
 /**
  * Utilities for monetary and number formatting.
